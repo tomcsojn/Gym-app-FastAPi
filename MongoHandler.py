@@ -12,7 +12,7 @@ class Mongo():
         self.db = self.connect(collectionName)
 
     def connect(self,collectionName):
-        return MongoClient('127.0.0.1', 27017).gym[collectionName]
+        return MongoClient("mongodb+srv://PytonApi:PythonApiPassword@gymapp.yoz41.mongodb.net/myFirstDatabase?retryWrites=true&w=majority").gym[collectionName]
     def getAll(self):
         """    
     
