@@ -1,0 +1,21 @@
+version: "3"
+services:
+  api:
+    image: api
+    build: ./
+    networks: 
+      - backend
+  mongodb-service:
+    image: mongo:4.4.5-bionic
+    ports: 
+      - 27017:27017
+    networks: 
+      - backend
+    volumes: 
+      - mongo-data:/data/db
+networks: 
+    backend:
+        driver: bridge
+volumes: 
+    mongo-data:
+        driver: local
