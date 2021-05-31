@@ -3,11 +3,12 @@ import pandas as pd
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse, RedirectResponse
-from MongoHandler import Mongo
-from Models import invoices_list
+from MongoHandler import Mongo_invoices,Mongo_users
+from Models import invoices_list,users
 # %%init
 app = FastAPI()
-mongo = Mongo()
+mongo_invoices = Mongo_invoices()
+mongo_users = Mongo_users()
 
 # %%Middleware
 app.add_middleware(
@@ -23,17 +24,40 @@ async def default():
     response = RedirectResponse(url='/docs')
     return response
 
-@app.get("/getall")
+@app.get("/invoice/getall")
 async def getall():
-    out = mongo.getAll()
+    out = mongo_invoices.getAll()
     return out.to_dict(orient='records')
-@app.post("/create")
+@app.post("/invoice/create")
 async def create(request:invoices_list):
     rawData = request.dict()["data"]
-    bodyDF = pd.DataFrame(rawData)
-    mongo.insert(rawData)
+    # bodyDF = pd.DataFrame(rawData)
+    mongo_invoices.insert(rawData)
     return "Successful"
+
+
+
+@app.get("/users/getall")
+async def getall():
+    out = mongo_users.getAll()
+    return out.to_dict(orient='records')
+@app.post("/users/login")
+async def login(username:str,password:str):
+    # rawData = request.dict()
+    # bodyDF = pd.DataFrame(rawData)
+    return mongo_users.login(username,password)
     
+    # return "Successful"    
+@app.get("/users/getbyid")
+async def getbyid(member_id:int):
+    out = mongo_users.getById(member_id)
+    return out.to_dict(orient='records')
+@app.post("/users/create")
+async def create(request:users):
+    rawData = request.dict()
+    # bodyDF = pd.DataFrame(rawData)
+    mongo_users.insert(rawData)
+    return "Successful"
 
 
 # %%Main
