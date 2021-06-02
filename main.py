@@ -38,7 +38,7 @@ async def create(request:invoices_list):
 
 
 @app.get("/users/getall")
-async def getall():
+async def getall_user():
     out = mongo_users.getAll()
     return out.to_dict(orient='records')
 @app.post("/users/login")
@@ -53,7 +53,7 @@ async def getbyid(member_id:int):
     out = mongo_users.getById(member_id)
     return out.to_dict(orient='records')
 @app.post("/users/create")
-async def create(request:users):
+async def create_user(request:users):
     rawData = request.dict()
     # bodyDF = pd.DataFrame(rawData)
     mongo_users.insert(rawData)
